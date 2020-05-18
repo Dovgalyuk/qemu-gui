@@ -256,6 +256,12 @@ void QMPInteractionSettings::listProperties_cb(QJsonObject object)
             if (name == "netdev")
             {
                 platformInfo->addNetdev(devices.first());
+                break;
+            }
+            else if (name == "drive")
+            {
+                platformInfo->addDrive(devices.first());
+                break;
             }
         }
         devices.pop_front();

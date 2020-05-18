@@ -24,6 +24,10 @@ PlatformInfo::PlatformInfo(const QString &path)
             {
                 netdev.append(xmlReader.readElementText());
             }
+            else if (xmlReader.name() == "Drive")
+            {
+                drives.append(xmlReader.readElementText());
+            }
         }
     }
 }
@@ -48,6 +52,11 @@ void PlatformInfo::addCpu(const QString &s)
 void PlatformInfo::addNetdev(const QString &s)
 {
     netdev.append(s);
+}
+
+void PlatformInfo::addDrive(const QString &s)
+{
+    drives.append(s);
 }
 
 void PlatformInfo::saveXml() const
@@ -81,6 +90,13 @@ void PlatformInfo::saveXml() const
         foreach(QString name, netdev)
         {
             xmlWriter.writeStartElement("Netdev");
+            xmlWriter.writeCharacters(name);
+            xmlWriter.writeEndElement();
+        }
+
+        foreach(QString name, drives)
+        {
+            xmlWriter.writeStartElement("Drive");
             xmlWriter.writeCharacters(name);
             xmlWriter.writeEndElement();
         }

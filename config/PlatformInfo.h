@@ -20,7 +20,7 @@ public:
     void addNetdev(const QString &s);
     void addDrive(const QString &s);
 
-    void addDevice(const QString &name, const QJsonArray &props);
+    void addDevice(const QString &name, const QString &parent, const QJsonArray &props);
 
     void saveXml() const;
 

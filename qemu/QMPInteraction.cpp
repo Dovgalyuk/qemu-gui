@@ -237,6 +237,7 @@ void QMPInteractionSettings::listDevices_cb(QJsonObject object)
             if (!isAbstract)
             {
                 devices.append(deviceName);
+                parents.append(v.toObject()["parent"].toString());
                 QMPInteraction::commandQmp(QMPCommands::DeviceListProperties,
                     getParamDevListProperties(deviceName));
             }
@@ -265,9 +266,10 @@ void QMPInteractionSettings::listProperties_cb(QJsonObject object)
             }
         }
 
-        platformInfo->addDevice(devices.first(), arrMessage);
+        platformInfo->addDevice(devices.first(), parents.first(), arrMessage);
 
         devices.pop_front();
+        parents.pop_front();
         cbQueue.pop_front();
     }
 }

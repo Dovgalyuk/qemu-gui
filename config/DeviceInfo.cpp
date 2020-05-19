@@ -1,6 +1,7 @@
 #include "DeviceInfo.h"
 
-DeviceInfo::DeviceInfo(const QJsonArray &json)
+DeviceInfo::DeviceInfo(const QString &p, const QJsonArray &json)
+    : parent(p)
 {
     for (const QJsonValue &v : json)
     {
@@ -14,6 +15,12 @@ DeviceInfo::DeviceInfo(const QJsonArray &json)
 
 void DeviceInfo::serialize(QXmlStreamWriter &xmlWriter) const
 {
+    if (!parent.isEmpty())
+    {
+        xmlWriter.writeStartElement("Parent");
+            xmlWriter.writeCharacters(parent);
+        xmlWriter.writeEndElement();
+    }
     xmlWriter.writeStartElement("Properties");
     foreach(QString name, props.keys())
     {

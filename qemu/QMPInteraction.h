@@ -15,7 +15,7 @@ enum class QMPCommands : int
     QueryMachines,
     QueryCpuDefinitions,
     QomListTypes,
-    DeviceListProperties
+    DeviceListProperties,
 };
 
 class QMPInteraction : public QObject
@@ -80,6 +80,7 @@ public:
 private:
     PlatformInfo *platformInfo;
     QStringList devices;
+    QStringList parents;
 
 private:
     virtual void machine_cb(QJsonObject object);

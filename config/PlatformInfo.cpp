@@ -59,9 +59,10 @@ void PlatformInfo::addDrive(const QString &s)
     drives.append(s);
 }
 
-void PlatformInfo::addDevice(const QString &name, const QJsonArray &props)
+void PlatformInfo::addDevice(const QString &name, const QString &parent,
+    const QJsonArray &props)
 {
-    devices.insert(name, DeviceInfo(props));
+    devices.insert(name, DeviceInfo(parent, props));
 }
 
 void PlatformInfo::saveXml() const

@@ -59,6 +59,11 @@ void PlatformInfo::addDrive(const QString &s)
     drives.append(s);
 }
 
+void PlatformInfo::addDevice(const QString &name, const QJsonArray &props)
+{
+    devices.insert(name, DeviceInfo(props));
+}
+
 void PlatformInfo::saveXml() const
 {
     QFile file(path + ".xml");
@@ -98,6 +103,16 @@ void PlatformInfo::saveXml() const
         {
             xmlWriter.writeStartElement("Drive");
             xmlWriter.writeCharacters(name);
+            xmlWriter.writeEndElement();
+        }
+
+        foreach(QString name, devices.keys())
+        {
+            xmlWriter.writeStartElement("Device");
+                xmlWriter.writeStartElement("Name");
+                    xmlWriter.writeCharacters(name);
+                xmlWriter.writeEndElement();
+                devices[name].serialize(xmlWriter);
             xmlWriter.writeEndElement();
         }
 

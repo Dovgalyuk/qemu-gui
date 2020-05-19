@@ -264,6 +264,9 @@ void QMPInteractionSettings::listProperties_cb(QJsonObject object)
                 break;
             }
         }
+
+        platformInfo->addDevice(devices.first(), arrMessage);
+
         devices.pop_front();
         cbQueue.pop_front();
     }

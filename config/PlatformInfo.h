@@ -3,6 +3,8 @@
 
 #include <QtCore/QtCore>
 
+#include "DeviceInfo.h"
+
 class PlatformInfo
 {
 public:
@@ -18,6 +20,8 @@ public:
     void addNetdev(const QString &s);
     void addDrive(const QString &s);
 
+    void addDevice(const QString &name, const QJsonArray &props);
+
     void saveXml() const;
 
 private:
@@ -26,6 +30,8 @@ private:
     QStringList cpus;
     QStringList netdev;
     QStringList drives;
+
+    QMap<QString, DeviceInfo> devices;
 };
 
 

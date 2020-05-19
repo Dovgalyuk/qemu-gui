@@ -21,7 +21,7 @@ add_executable(qemu-gui
     common/FileHelpers.cpp
 
     config/GlobalConfig.cpp config/VMConfig.cpp config/PlatformInfo.cpp 
-    config/RecordReplayParams.cpp config/QemuList.cpp
+    config/RecordReplayParams.cpp config/QemuList.cpp config/DeviceInfo.cpp
 
     device/Device.cpp device/DeviceBus.cpp device/DeviceStorage.cpp
     device/DeviceFactory.cpp device/DeviceSystem.cpp
@@ -49,7 +49,7 @@ add_executable(qemu-cli cli/main.cpp
     common/FileHelpers.cpp
 
     config/GlobalConfig.cpp config/VMConfig.cpp config/QemuList.cpp
-    config/PlatformInfo.cpp config/RecordReplayParams.cpp
+    config/PlatformInfo.cpp config/RecordReplayParams.cpp config/DeviceInfo.cpp
 
     device/Device.cpp device/DeviceBus.cpp device/DeviceStorage.cpp device/DeviceSystem.cpp
     device/DeviceUsb.cpp device/DeviceNetwork.cpp device/DeviceFactory.cpp

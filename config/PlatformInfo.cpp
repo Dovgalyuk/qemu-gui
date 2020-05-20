@@ -28,6 +28,11 @@ PlatformInfo::PlatformInfo(const QString &path)
             {
                 drives.append(xmlReader.readElementText());
             }
+            else if (xmlReader.name() == "Device")
+            {
+                DeviceInfo dev(xmlReader);
+                devices.insert(dev.getName(), dev);
+            }
         }
     }
 }
@@ -62,7 +67,7 @@ void PlatformInfo::addDrive(const QString &s)
 void PlatformInfo::addDevice(const QString &name, const QString &parent,
     const QJsonArray &props)
 {
-    devices.insert(name, DeviceInfo(parent, props));
+    devices.insert(name, DeviceInfo(name, parent, props));
 }
 
 void PlatformInfo::saveXml() const
@@ -109,12 +114,7 @@ void PlatformInfo::saveXml() const
 
         foreach(QString name, devices.keys())
         {
-            xmlWriter.writeStartElement("Device");
-                xmlWriter.writeStartElement("Name");
-                    xmlWriter.writeCharacters(name);
-                xmlWriter.writeEndElement();
-                devices[name].serialize(xmlWriter);
-            xmlWriter.writeEndElement();
+            devices[name].serialize(xmlWriter);
         }
 
         xmlWriter.writeEndElement();

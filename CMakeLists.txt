@@ -26,6 +26,7 @@ add_executable(qemu-gui
     device/Device.cpp device/DeviceBus.cpp device/DeviceStorage.cpp
     device/DeviceFactory.cpp device/DeviceSystem.cpp
     device/DeviceUsb.cpp device/DeviceNetwork.cpp
+    device/DeviceConfiguration.cpp
 
     qemu/QemuRunOptions.cpp qemu/QemuLauncher.cpp qemu/QemuImgLauncher.cpp
     qemu/CommandLineParameters.cpp qemu/QMPInteraction.cpp
@@ -53,6 +54,7 @@ add_executable(qemu-cli cli/main.cpp
 
     device/Device.cpp device/DeviceBus.cpp device/DeviceStorage.cpp device/DeviceSystem.cpp
     device/DeviceUsb.cpp device/DeviceNetwork.cpp device/DeviceFactory.cpp
+    device/DeviceConfiguration.cpp
 
     qemu/PlatformInformationReader.cpp qemu/QemuRunOptions.cpp qemu/QemuLauncher.cpp
     qemu/QemuImgLauncher.cpp qemu/CommandLineParameters.cpp

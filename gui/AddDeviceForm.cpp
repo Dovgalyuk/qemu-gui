@@ -1,5 +1,6 @@
 #include "AddDeviceForm.h"
 #include "DeviceFactory.h"
+#include "device/DeviceConfiguration.h"
 #include "QemuGUI.h"
 
 
@@ -33,11 +34,26 @@ AddDeviceForm::AddDeviceForm(const Device *device, QWidget *parent)
     connect(deviceList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), 
         this, SLOT(addNewDeviceDblClick(QListWidgetItem *)));
 
+    // DeviceFactory for everything
     addDevices = DeviceFactory::getDevicesForBus(device->providesBus());
     foreach(auto dev, addDevices)
     {
         deviceList->addItem(dev->getDeviceTypeName());
     }
+    // Get PCI devices from platform directly
+    if (device->providesBus() == BusType::PCI)
+    {
+        PlatformInfo pi(device->getPathToConfig());
+        foreach(auto dev, pi.getDevices())
+        {
+            if (dev.getParent() == "pci-device")
+            {
+                deviceList->addItem(dev.getName());
+                addDevices.append(new DeviceConfiguration(dev.getName(), NULL));
+            }
+        }
+    }
+
     pWidget = parent;
 }
 

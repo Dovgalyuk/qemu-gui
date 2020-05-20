@@ -13,12 +13,18 @@ public:
     };
 public:
     DeviceInfo() {}
-    explicit DeviceInfo(const QString &p, const QJsonArray &json);
+    explicit DeviceInfo(QXmlStreamReader &xml);
+    DeviceInfo(const QString &n, const QString &p,
+        const QJsonArray &json);
+
+    const QString &getName() const { return name; }
+    const QString &getParent() const { return parent; }
 
     void serialize(QXmlStreamWriter &xmlWriter) const;
 
 private:
-    // TODO: name, platform ?
+    // TODO: platform ?
+    QString name;
     QString parent;
     QMap<QString, Property> props;
 };

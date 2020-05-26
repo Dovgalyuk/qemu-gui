@@ -2,9 +2,10 @@
 #define DEVICEFORM_H
 
 #include <QtWidgets>
-#include "DeviceStorage.h"
-#include "DeviceSystem.h"
-#include "DeviceNetwork.h"
+#include "device/DeviceStorage.h"
+#include "device/DeviceSystem.h"
+#include "device/DeviceNetwork.h"
+#include "device/DeviceConfiguration.h"
 
 class DeviceCommandLineForm;
 
@@ -128,6 +129,17 @@ public:
 
 private:
     DeviceCpu *device;
+};
+
+class DeviceConfigurationForm : public DeviceForm
+{
+    Q_OBJECT
+
+public:
+    DeviceConfigurationForm(DeviceConfiguration *dev);
+
+private:
+    DeviceConfiguration *device;
 };
 
 #endif // DEVICEFORM_H

@@ -11,6 +11,7 @@ public:
         QString type;
         QString description;
     };
+    typedef QMap<QString, Property> Properties;
 public:
     DeviceInfo() {}
     explicit DeviceInfo(QXmlStreamReader &xml);
@@ -19,6 +20,7 @@ public:
 
     const QString &getName() const { return name; }
     const QString &getParent() const { return parent; }
+    const Properties &getProperties() const { return props; }
 
     void serialize(QXmlStreamWriter &xmlWriter) const;
 
@@ -26,7 +28,7 @@ private:
     // TODO: platform ?
     QString name;
     QString parent;
-    QMap<QString, Property> props;
+    Properties props;
 };
 
 #endif

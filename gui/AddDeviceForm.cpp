@@ -49,7 +49,9 @@ AddDeviceForm::AddDeviceForm(const Device *device, QWidget *parent)
             if (dev.getParent() == "pci-device")
             {
                 deviceList->addItem(dev.getName());
-                addDevices.append(new DeviceConfiguration(dev.getName(), NULL));
+                Device *d = new DeviceConfiguration(dev.getName(), NULL);
+                d->setPathToConfig(device->getPathToConfig());
+                addDevices.append(d);
             }
         }
     }

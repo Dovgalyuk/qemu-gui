@@ -310,3 +310,32 @@ DeviceCpuForm::DeviceCpuForm(DeviceCpu *dev)
 }
 
 
+/******************************************************************************
+* Device Configuration                                                        *
+******************************************************************************/
+
+DeviceConfigurationForm::DeviceConfigurationForm(DeviceConfiguration *dev)
+    : DeviceForm(dev), device(dev)
+{
+
+    QFormLayout *topLay = new QFormLayout();
+    DeviceInfo di = device->getPlatformDeviceInfo();
+    const DeviceInfo::Properties &props = di.getProperties();
+    foreach(auto name, props.keys())
+    {
+        QLineEdit *edit = new QLineEdit();
+        topLay->addRow(name, edit);
+
+        edit->setText(device->getProperty(name));
+        edit->setPlaceholderText(props[name].description);
+
+        connect(edit, &QLineEdit::textEdited,
+            [=](const QString &text)
+            {
+                device->setProperty(name, text);
+            }
+        );
+    }
+
+    devFormAddLayout(topLay);
+}

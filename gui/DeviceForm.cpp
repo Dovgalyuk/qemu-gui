@@ -291,7 +291,6 @@ DeviceCpuForm::DeviceCpuForm(DeviceCpu *dev)
     QLabel *cpuLbl = new QLabel("Model");
     QComboBox *cpuCombo = new QComboBox();
 
-    cpuLbl->setFixedWidth(30);
     cpuCombo->addItems(device->getCpuModels());
     cpuCombo->setCurrentText(device->getName());
 

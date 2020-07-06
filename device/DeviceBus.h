@@ -13,7 +13,20 @@ public:
     DeviceBus(const QString &n, Device *parent);
 
     virtual QString getDeviceTypeName() const = 0;
-    virtual int getMaxCountDevices() const { return 1; }
+    virtual int getMaxCountDevices() const { return 1024; }
+};
+
+class DeviceBusSystem : public DeviceBus
+{
+public:
+    static const char typeName[];
+
+    DeviceBusSystem(Device *parent);
+
+    virtual QString getDeviceTypeName() const { return typeName; }
+
+    virtual BusType providesBus() const { return BusType::System; }
+private:
 };
 
 class DeviceBusIde : public DeviceBus
@@ -26,6 +39,7 @@ public:
     virtual QString getDeviceTypeName() const { return typeName; }
 
     virtual BusType providesBus() const { return BusType::IDE; }
+    virtual int getMaxCountDevices() const { return 1; }
 
     int getNumber() const { return num; }
 private:
@@ -43,7 +57,6 @@ public:
     virtual QString getDeviceTypeName() const { return typeName; }
 
     virtual BusType providesBus() const { return BusType::PCI; }
-    virtual int getMaxCountDevices() const { return 1024; }
 
     int getNumber() const { return num; }
 private:

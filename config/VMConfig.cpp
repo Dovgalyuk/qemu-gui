@@ -1,7 +1,8 @@
 #include "VMConfig.h"
-#include "DeviceStorage.h"
-#include "DeviceSystem.h"
-#include "DeviceUsb.h"
+#include "device/DeviceBus.h"
+#include "device/DeviceStorage.h"
+#include "device/DeviceSystem.h"
+#include "device/DeviceUsb.h"
 #include "common/FileHelpers.h"
 
 const QString const_xml_name = "vm.xml";
@@ -165,6 +166,9 @@ void VMConfig::addDefaultBus(const QString &image)
     {
         new DeviceIdeHd(image, ide->getDevices().at(0));
     }
+    // system bus for user devices
+    // TODO: Will be enabled later
+    //new DeviceBusSystem(&system);
 }
 
 void VMConfig::addDeviceMemory(const QString &size)

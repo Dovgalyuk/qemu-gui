@@ -45,7 +45,8 @@ AddDeviceForm::AddDeviceForm(const Device *device, QWidget *parent)
     }
     // Get devices from platform directly
     struct { BusType bus; const char *parent; } buses[] = {
-        { BusType::System, "sys-bus-device" },
+        // TODO: enable this after adding default device introspection
+        //{ BusType::System, "sys-bus-device" },
         { BusType::IDE, "ide-device" },
         { BusType::PCI, "pci-device" },
     };

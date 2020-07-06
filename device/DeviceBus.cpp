@@ -1,5 +1,5 @@
-#include "DeviceBus.h"
-#include "DeviceStorage.h"
+#include "device/DeviceBus.h"
+#include "device/DeviceStorage.h"
 
 DeviceBus::DeviceBus(const QString &n, Device *parent)
     : Device(n, parent)

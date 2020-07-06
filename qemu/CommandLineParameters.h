@@ -23,6 +23,9 @@ public:
     void setOverlayEnabled(bool isEnabled) { overlayEnabled = isEnabled; }
     bool isOverlayEnabled() { return overlayEnabled; }
 
+    // generate drive/blkreplay options for disks
+    QString getDriveOption(const QString &image, const QString &id);
+
 private:
     QString getNextOverlayName();
 

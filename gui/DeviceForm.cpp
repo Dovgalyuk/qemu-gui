@@ -110,43 +110,52 @@ void DeviceCommandLineForm::saveUserOptions()
 * Storage Device Form                                                         *
 ******************************************************************************/
 
-DeviceStorageForm::DeviceStorageForm(DeviceStorage *dev)
-    : DeviceForm(dev), device(dev)
+DriveSelector::DriveSelector(const QString &image)
 {
     QLineEdit *imageLine = new QLineEdit();
     QPushButton *selectImageBtn = new QPushButton("...");
 
     selectImageBtn->setFixedWidth(30);
-    imageLine->setText(device->getImage());
+    imageLine->setText(image);
     imageLine->setReadOnly(true);
-    if (device->getImage().isEmpty())
+    if (image.isEmpty())
     {
         imageLine->setStyleSheet("background: #EE756F");
     }
 
-    QHBoxLayout *topLay = new QHBoxLayout();
-    topLay->addWidget(imageLine);
-    topLay->addWidget(selectImageBtn);
-    devFormAddLayout(topLay);
+    addWidget(imageLine);
+    addWidget(selectImageBtn);
 
-    connect(selectImageBtn, &QPushButton::clicked, this, &DeviceStorageForm::editImage);
-    connect(this, SIGNAL(newImageSet(QString)), imageLine, SLOT(setText(QString)));
-    connect(this, SIGNAL(newDiskCompleted(QString)), imageLine, SLOT(setStyleSheet(QString)));
+    connect(selectImageBtn, &QPushButton::clicked,
+        [=]()
+        {
+            QString newImage = QFileDialog::getOpenFileName(nullptr, "Selecting image",
+                "", "Images(*.qcow *.qcow2 *.img *.raw *.iso);; Other files(*.*)");
+            if (!newImage.isEmpty())
+            {
+                emit diskSelected(newImage);
+                imageLine->setText(newImage);
+                imageLine->setStyleSheet("");
+            }
+        }
+    );
 }
 
-void DeviceStorageForm::editImage()
+
+DeviceStorageForm::DeviceStorageForm(DeviceStorage *dev)
+    : DeviceForm(dev), device(dev)
 {
-    QString newImage = QFileDialog::getOpenFileName(nullptr, "Selecting image",
-        "", "Images(*.qcow *.qcow2 *.img *.raw *.iso);; Other files(*.*)");
-    if (!newImage.isEmpty())
-    {
-        emit newImageSet(newImage);
-        emit newDiskCompleted("");
-        device->setImage(newImage);
-        getCmdWidget()->updateCmd();
-    }
-}
+    DriveSelector *sel = new DriveSelector(device->getImage());
+    devFormAddLayout(sel);
 
+    connect(sel, &DriveSelector::diskSelected,
+        [=](const QString &image)
+        {
+            device->setImage(image);
+            getCmdWidget()->updateCmd();
+        }
+    );
+}
 
 /******************************************************************************
 * SCSI Controller Form                                                        *
@@ -322,18 +331,35 @@ DeviceConfigurationForm::DeviceConfigurationForm(DeviceConfiguration *dev)
     const DeviceInfo::Properties &props = di.getProperties();
     foreach(auto name, props.keys())
     {
-        QLineEdit *edit = new QLineEdit();
-        topLay->addRow(name, edit);
+        if (name == "drive")
+        {
+            // disk image selector
+            DriveSelector *edit = new DriveSelector(device->getProperty(name));
+            topLay->addRow(name, edit);
 
-        edit->setText(device->getProperty(name));
-        edit->setPlaceholderText(props[name].description);
+            connect(edit, &DriveSelector::diskSelected,
+                [=](const QString &text)
+                {
+                    device->setProperty(name, text);
+                }
+            );
+        }
+        else
+        {
+            // other fields
+            QLineEdit *edit = new QLineEdit();
+            topLay->addRow(name, edit);
 
-        connect(edit, &QLineEdit::textEdited,
-            [=](const QString &text)
-            {
-                device->setProperty(name, text);
-            }
-        );
+            edit->setText(device->getProperty(name));
+            edit->setPlaceholderText(props[name].description);
+
+            connect(edit, &QLineEdit::textEdited,
+                [=](const QString &text)
+                {
+                    device->setProperty(name, text);
+                }
+            );
+        }
     }
 
     devFormAddLayout(topLay);

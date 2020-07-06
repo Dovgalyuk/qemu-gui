@@ -27,6 +27,14 @@ private:
     DeviceCommandLineForm *cmdWidget;
 };
 
+class DriveSelector : public QHBoxLayout
+{
+    Q_OBJECT
+public:
+    DriveSelector(const QString &image);
+signals:
+    void diskSelected(const QString &image);
+};
 
 class DeviceStorageForm : public DeviceForm
 {
@@ -37,13 +45,6 @@ public:
 
 private:
     DeviceStorage *device;
-
-protected slots:
-    void editImage();
-
-signals:
-    void newImageSet(QString);
-    void newDiskCompleted(QString);
 };
 
 

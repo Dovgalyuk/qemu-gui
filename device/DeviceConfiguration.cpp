@@ -1,5 +1,6 @@
 #include "DeviceConfiguration.h"
 #include "DeviceFactory.h"
+#include "device/DeviceBus.h"
 #ifdef GUI
 #include "DeviceForm.h"
 #endif
@@ -35,17 +36,35 @@ QWidget *DeviceConfiguration::getEditorForm()
 
 QString DeviceConfiguration::getCommandLineOption(CommandLineParameters &cmdParams)
 {
-    QString res = " -device " + getName() + ",id=" + getId();
+    DeviceBus *bus = dynamic_cast<DeviceBus*>(parent());
+    Q_ASSERT(bus);
+
+    QString res = " -device " + getName() + ",id=" + getId()
+        + ",bus=" + bus->getName();
     foreach (auto name, props.keys())
     {
-        res += "," + name + "=" + props[name];
+        if (name == "drive")
+        {
+            QString drv = cmdParams.getDriveOption(props[name], getId());
+            res = drv + res + ",drive=" + getId() + "-drive";
+        }
+        else
+        {
+            res += "," + name + "=" + props[name];
+        }
     }
     return res;
 }
 
 QString DeviceConfiguration::getDeviceInfo()
 {
-    return "Device: " + getName() + "\n";
+    QString res = "Device: " + getName();
+    foreach (auto name, props.keys())
+    {
+        res += " " + name + "=" + props[name];
+    }
+
+    return res;
 }
 
 void DeviceConfiguration::saveParameters(QXmlStreamWriter &xml) const

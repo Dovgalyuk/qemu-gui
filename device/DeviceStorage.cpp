@@ -176,28 +176,12 @@ QString DeviceIdeHd::getCommandLineOption(CommandLineParameters &cmdParams)
     DeviceIdeController *ide = dynamic_cast<DeviceIdeController*>(bus->parent());
     Q_ASSERT(ide);
 
-    if (cmdParams.getLaunchMode() == LaunchMode::NORMAL)
-    {
-        QString cmdFile = " -drive file=\"" + getImage() + "\"" + ",if=none,id="
-            + getId() + "-file";
-        return  cmdFile + " -device ide-hd"
-            +",bus=" + ide->getId() + "." + QString::number(bus->getNumber()) 
-            + ",drive=" + getId() + "-file"
-            + ",id=" + getId();
-    }
-    else
-    {
-        QString overlay = cmdParams.getOverlayForImage(getImage());
-        QString cmdFile = " -drive file=\"" + overlay + "\"" + ",if=none,id="
-            + getId() + "-file";
-        QString overlayEnabled = cmdParams.isOverlayEnabled() ? "" : ",snapshot=on";
+    QString drv = cmdParams.getDriveOption(getImage(), getId());
 
-        return cmdFile + overlayEnabled + " -drive driver=blkreplay,if=none,image="
-            + getId() + "-file,id=" + getId() 
-            + "-driver -device ide-hd,drive=" + getId() + "-driver"
+    return drv + " -device ide-hd"
             +",bus=" + ide->getId() + "." + QString::number(bus->getNumber()) 
+            + ",drive=" + getId() + "-drive"
             + ",id=" + getId();
-    }
 }
 
 bool DeviceIdeHd::isDeviceValid()
@@ -240,27 +224,12 @@ QString DeviceIdeCdrom::getCommandLineOption(CommandLineParameters &cmdParams)
     DeviceIdeController *ide = dynamic_cast<DeviceIdeController*>(bus->parent());
     Q_ASSERT(ide);
 
-    if (cmdParams.getLaunchMode() == LaunchMode::NORMAL)
-    {
-        QString cmdFile = " -drive file=\"" + getImage() + "\"" + ",if=none,id="
-            + getId() + "-file";
-        return  cmdFile + " -device ide-cd"
-            + ",bus=" + ide->getId() + "." + QString::number(bus->getNumber())
-            + ",drive=" + getId() + "-file"
-            + ",id=" + getId();
-    }
-    else
-    {
-        QString overlay = cmdParams.getOverlayForImage(getImage());
-        QString cmdFile = " -drive file=\"" + overlay + "\"" + ",if=none,id="
-            + getId() + "-file";
+    QString drv = cmdParams.getDriveOption(getImage(), getId());
 
-        return cmdFile + " -drive driver=blkreplay,if=none,image="
-            + getId() + "-file,id=" + getId()
-            + "-driver -device ide-cd,drive=" + getId() + "-driver"
-            + ",bus=" + ide->getId() + "." + QString::number(bus->getNumber())
-            + ",id=" + getId();
-    }
+    return drv + " -device ide-cd"
+        + ",bus=" + ide->getId() + "." + QString::number(bus->getNumber())
+        + ",drive=" + getId() + "-drive"
+        + ",id=" + getId();
 }
 
 bool DeviceIdeCdrom::isDeviceValid()
@@ -301,24 +270,11 @@ QString DeviceScsiHd::getCommandLineOption(CommandLineParameters &cmdParams)
     // TODO: bus?
     DeviceScsiController *scsi = dynamic_cast<DeviceScsiController *>(parent());
     Q_ASSERT(scsi);
-    if (cmdParams.getLaunchMode() == LaunchMode::NORMAL)
-    {
-        QString cmdFile = " -drive file=\"" + getImage() + "\"" + ",if=none,id="
-            + getId() + "-file";
-        return  cmdFile + " -device scsi-hd,drive=" + getId() + "-file"
-            + ",bus=" + scsi->getId() + ".0";
-    }
-    else
-    {
-        QString overlay = cmdParams.getOverlayForImage(getImage());
-        QString cmdFile = " -drive file=\"" + overlay + "\"" + ",if=none,id="
-            + getId() + "-file";
 
-        return cmdFile + " -drive driver=blkreplay,if=none,image="
-            + getId() + "-file,id=" + getId()
-            + "-driver -device scsi-hd,drive=" + getId() + "-driver"
-            + ",bus=" + scsi->getId() + ".0" + ",id=" + getId();
-    }
+    QString drv = cmdParams.getDriveOption(getImage(), getId());
+
+    return drv + " -device scsi-hd,drive=" + getId() + "-drive"
+        + ",bus=" + scsi->getId() + ".0" + ",id=" + getId();
 }
 
 bool DeviceScsiHd::isDeviceValid()
@@ -333,4 +289,3 @@ QString DeviceScsiHd::getDeviceInfo()
     return "\tImage: " + getImage() + "\n"
         + "\tBus: " + scsi->getId() + ".0" + "\n";
 }
-

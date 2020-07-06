@@ -41,17 +41,25 @@ AddDeviceForm::AddDeviceForm(const Device *device, QWidget *parent)
         deviceList->addItem(dev->getDeviceTypeName());
     }
     // Get PCI devices from platform directly
-    if (device->providesBus() == BusType::PCI)
+    struct { BusType bus; const char *parent; } buses[] = {
+        { BusType::System, "sys-bus-device" },
+        { BusType::IDE, "ide-device" },
+        { BusType::PCI, "pci-device" },
+    };
+    for (auto b : buses)
     {
-        PlatformInfo pi(device->getPathToConfig());
-        foreach(auto dev, pi.getDevices())
+        if (device->providesBus() == b.bus)
         {
-            if (dev.getParent() == "pci-device")
+            PlatformInfo pi(device->getPathToConfig());
+            foreach(auto dev, pi.getDevices())
             {
-                deviceList->addItem(dev.getName());
-                Device *d = new DeviceConfiguration(dev.getName(), NULL);
-                d->setPathToConfig(device->getPathToConfig());
-                addDevices.append(d);
+                if (dev.getParent() == b.parent)
+                {
+                    deviceList->addItem(dev.getName());
+                    Device *d = new DeviceConfiguration(dev.getName(), NULL);
+                    d->setPathToConfig(device->getPathToConfig());
+                    addDevices.append(d);
+                }
             }
         }
     }

@@ -16,10 +16,10 @@ DeviceBusIde::DeviceBusIde(int n, DeviceIdeController *parent)
 }
 
 
-//const char DeviceBusPci::typeName[] = "DeviceBusPci";
+const char DeviceBusPci::typeName[] = "DeviceBusPci";
 
-//DeviceBusPci::DeviceBusPci(int n, DevicePciController *parent)
-//    : DeviceBus(QString("pci.%1").arg(num), parent), num(n)
-//{
-//
-//}
+DeviceBusPci::DeviceBusPci(int n, DevicePciController *parent)
+   : DeviceBus(QString("pci.%1").arg(n), parent), num(n)
+{
+
+}

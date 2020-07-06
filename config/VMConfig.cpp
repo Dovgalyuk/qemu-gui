@@ -159,7 +159,7 @@ void VMConfig::addDefaultBus(const QString &image)
 {
     Device *pci = new DevicePciController(&system);
     pci->setRemovable(false);
-    Device *ide = new DeviceIdeController(pci);
+    Device *ide = new DeviceIdeController(pci->getDevices().at(0));
     ide->setRemovable(false);
     if (!image.isEmpty())
     {

@@ -50,9 +50,6 @@ public:
     virtual QString getDeviceTypeName() const { return typeName; }
     virtual BusType needsBus() const { return BusType::System; }
 
-protected:
-    virtual BusType providesBus() const { return BusType::PCI; }
-
 private:
     void initDefault();
 };

@@ -54,6 +54,7 @@ DevicePciController::DevicePciController(Device *parent)
 
 void DevicePciController::initDefault()
 {
+    (new DeviceBusPci(0, this))->setRemovable(false);
     setId("pci");
 }
 

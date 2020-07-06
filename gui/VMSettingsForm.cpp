@@ -243,6 +243,10 @@ void VMSettingsForm::showContextMenu(const QPoint &pos)
 
             menu.addAction(addDeviceAct);
         }
+        else
+        {
+            delete addDev;
+        }
 
         if (dev->isRemovable())
         {
@@ -254,10 +258,6 @@ void VMSettingsForm::showContextMenu(const QPoint &pos)
         if (!menu.isEmpty())
         {
             menu.exec(deviceTree->mapToGlobal(pos));
-        }
-        else
-        {
-            delete addDev;
         }
     }
     /*

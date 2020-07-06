@@ -35,12 +35,15 @@ AddDeviceForm::AddDeviceForm(const Device *device, QWidget *parent)
         this, SLOT(addNewDeviceDblClick(QListWidgetItem *)));
 
     // DeviceFactory for everything
-    addDevices = DeviceFactory::getDevicesForBus(device->providesBus());
-    foreach(auto dev, addDevices)
+    if (device->providesBus() != BusType::None)
     {
-        deviceList->addItem(dev->getDeviceTypeName());
+        addDevices = DeviceFactory::getDevicesForBus(device->providesBus());
+        foreach(auto dev, addDevices)
+        {
+            deviceList->addItem(dev->getDeviceTypeName());
+        }
     }
-    // Get PCI devices from platform directly
+    // Get devices from platform directly
     struct { BusType bus; const char *parent; } buses[] = {
         { BusType::System, "sys-bus-device" },
         { BusType::IDE, "ide-device" },
